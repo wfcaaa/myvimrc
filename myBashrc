@@ -1,0 +1,120 @@
+# ----------------------------------------------------------------------------
+#   File        : .my_bashrc
+#   Author      : Christian Kehrmann
+#   Description :
+#     Users additions/modifications to .bashrc-file. 
+#
+#   $RCSfile: .my_bashrc,v $
+#   $Revision: 1.1 $
+#   $Date: 2011/11/02 13:13:37 $
+# ----------------------------------------------------------------------------
+#
+################################################################################
+###
+###   This file is for user-modifications to the settings of .bashrc
+###
+###   For information and a pointer to the documentation on the web
+###   see the comments at the beginning of  $HOME/.bashrc
+###
+################################################################################
+
+# Example: Set prompt
+# In .bashrc several colors are set:
+# NORMAL BLACK WHITE GREEN RED YELLOW BLUE MAGENTA LIGHTBLUE REVYELLOW
+#
+# Twoline colourful prompt:
+# PS1="${RED}\h:${BLUE}\${PWD}${NORMAL}
+# $ "
+#
+# and for ClearCase also:
+# if [[ -n "${CLEARCASE_ROOT}" ]]
+# then
+#   PS1="${RED}\h:${GREEN}/view/`basename ${CLEARCASE_ROOT}`:${BLUE}\${PWD}${NORMAL}
+# $ "
+# fi
+#
+# Simple color prompt with hostname and current directory
+# PS1="${RED}\h:${BLUE}\${PWD##/*/*/*/}${NORMAL} $ "
+
+# To enable extended regular expressions (see 'man shopt' for details)
+# shopt -s extglob
+
+# To disable colors in ls-commands (it's enabled as
+# default in /etc/profile.d/colorls.sh)
+# unalias ls
+# alias ll='ls -l'
+#
+################################ my set in bash######################################
+
+alias vi="/bin/gvim"
+alias vimrc="vi ~/.vimrc"
+alias vi.="vi ~/.my_bashrc"
+#alias s="source ~/.my_bashrc"
+alias cd.="cd ~/"
+alias cdws="cd /workspaces/atslxws605/jaxwu"
+alias cp="cp -i"
+alias rm="rm -i"
+alias mv="mv -i"
+alias swvs="/opt/hp93000/soc_common/switch_version/switch_version.rb"
+alias tsmt="/opt/hp93000/soc/prod_env/bin/HPSmarTest -o &"
+alias tksmt="/opt/hp93000/soc/prod_env/lbin/kill_smarTest"
+alias dsmt_setEnv="/workspaces/atslxws605/jaxwu/ws-dev-jaxwu/vobs/zenith/workspace/bin/set_environment"
+alias dsmt="/workspaces/atslxws605/jaxwu/ws-dev-jaxwu/opt/hp93000/soc/prod_env/bin/HPSmarTest &"
+alias dksmt="/workspaces/atslxws605/jaxwu/ws-dev-jaxwu/opt/hp93000/soc/prod_env/lbin/kill_smarTest"
+alias eclipse="/opt/ate/devtools/bin/eclipse &"
+alias cdtc="cd /opt/hp93000/testcell"
+alias vihelp="vimtutor"
+#alias vncserver=" x0vncserver PasswordFile=/home/jaxwu/.vnc/passwd &"
+alias mygrep="grep -rin --color=auto"
+alias myvnc="x0vncserver PasswordFile=/home/jaxwu/.vnc/passwd &"
+alias tagscmdline="ctags -R --c++-kinds=+px --fields=+iaS --extra=+q "
+
+
+
+# the alias who include `echo $WORKSPACE` must set /ws/bin/set_environment before use
+alias dkph=`echo $WORKSPACE`"/system/bin/killPH"
+alias dtcct=`echo $WORKSPACE`"/system/bin/tcct"
+alias dktc=`echo $WORKSPACE`"/system/bin/killTcct"
+alias cdworks=" "cd" `echo $WORKSPACE`"
+alias set_phrun=`echo $WORKSPACE`"/ph-development/system/bin/run"
+alias cd_phhan=" "cd" ` echo $WORKSPACE`"/ph-development/development/drivers/Generic_93K_Driver/GenericHandler" "
+alias cd_sydriver=" "cd" `echo $WORKSPACE`"/system/phcontrol/drivers/Generic_93K_Driver" "
+alias cd_phpro=" "cd" ` echo $WORKSPACE`"/ph-development/development/drivers/Generic_93K_Driver/GenericProber" "
+alias cd_hpp=" "cd" `echo $WORKSPACE`"/template_system/include/xoc/tcapi/major" "
+alias cd_tc=" "cd" `echo $WORKSPACE`"/opt/hp93000/testcell/" "
+alias cd_tcapi=" "cd" `echo $WORKSPACE`"/tcct/integration/cor/tcapi" "
+alias cd_monitor=" cd  `echo $WORKSPACE`/system/examples/tcapi/monitor  "
+
+# ---------------------------------------
+# -- set PROMPT
+# ---------------------------------------
+
+function add_git_branch_to_prompt {
+   local c_red='\e[31m'
+   local c_green='\e[0;32m'
+   local c_blue='\e[0;34m'
+   local c_clear='\e[0m'
+   branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+   repo=$(git rev-parse --show-toplevel 2>/dev/null)
+
+   if [[ -n "${ENV_SCM_WORKSPACE_ROOT}" && -n "$branch" ]] ; then
+     echo -e "${c_red}ENV Prepared for: ${c_green}${ENV_SCM_WORKSPACE_ROOT} ${c_clear} Branch for current repo: ${c_green}${branch}${c_clear}"
+   elif [[ -n "${ENV_SCM_WORKSPACE_ROOT}" ]] ; then
+     echo -e "${c_red}ENV Prepared for: ${c_green}${ENV_SCM_WORKSPACE_ROOT} ${c_clear}"
+   fi
+}
+
+PROMPT_COMMAND="add_git_branch_to_prompt"
+
+#set normal prompt
+PS1="\[${RED}\]`hostname`: \[${BLUE}\]\${PWD}\\[${NORMAL}\]\n\[${YELLOW}\]\\u:\[${NORMAL}\]$ "
+
+# Set Prompt for ClearCase-Views
+if [[ -n "${CLEARCASE_ROOT}" ]]
+then
+  PS1="\[${RED}\]`hostname`: \[${GREEN}\]/view/`basename ${CLEARCASE_ROOT}`: \[${BLUE}\]\${PWD}\[${NORMAL}\]
+$ "
+fi
+
+export PS1
+
