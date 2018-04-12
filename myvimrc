@@ -1,0 +1,180 @@
+"vundel set
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+"formal plugin
+Plugin 'gmarik/Vundle.vim'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'vim-scripts/ShowMarks'
+Plugin 'vim-scripts/winmanager'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-scripts/a.vim'
+
+" colorscheme pulugin
+Plugin 'flazz/vim-colorschemes'
+Plugin 'altercation/vim-colors-solarized'
+call vundle#end()
+filetype plugin indent on
+
+
+
+
+"""""""""""basic
+set encoding=utf-8
+set nu
+syntax enable               " syntax highlight
+
+set mousemodel=popup        "right-click will pop up menu
+set history=1000
+set ignorecase
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+
+"keyboard
+set tabstop=4 				"set tab width equal to 4
+set expandtab 				"use space to replace tab
+set softtabstop=4			"treat multple spaces as a tab when delete
+set scrolloff=8				"margin rows when cursor reach top or bottom
+set backspace=2				"enable backspace
+set whichwrap=b,s,<,>,[,]	"will skip to next row when the cursor reach the the end of the row
+"indent
+set autoindent              "auto indent
+set autochdir               "auto change the dirctory
+set cindent                 "c mode indent
+set cindent shiftwidth=4    "indent space number
+set cursorline
+set nowrapscan              "no auto wrap
+
+"##############colorscheme set
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+"if has('gui_running')
+"    set background=light
+"else
+ "   set background=dark
+"endif
+
+"############fold level set
+set foldmethod=syntax               "fold by syn
+set foldlevel=2                     "fold level
+
+
+
+
+
+
+"###############insert mode quickly move
+inoremap<C-L> <Right>
+inoremap<C-H> <Left>
+inoremap<C-E> <del>
+"inoremap<C-S> <Down>
+"inoremap<C-W> <Up>
+imap <m-4> <esc>$a
+imap <m-0> <esc>0i
+imap <m-6> <esc>^i
+map <silent> <expr> j (v:count == 0 ? 'gj' :'j')
+map <silent> <expr> k (v:count == 0 ? 'gk' :'k')
+
+"ctrl+c/crtl+v
+map<c-v> "+gP
+map<c-c> "+y
+map<c-x> "+x
+
+
+let mapleader=","
+let g:mapleader=","
+"""""""""""""""""""""""ctags
+let Tlist_Show_One_File=1       "set tlist obj to the current file
+let Tlist_Exit_OnlyWindow=1     "when the tlist is the only one, close it
+set updatetime=1500             "flash time
+"jlanzarotta explorer
+let g:bufExplorerSplitRight=1   " the position of buffexplorer is right
+let g:bufExplorerShowTabBuffer=1  "show buffer on the specific tab
+"windowmanager
+let g:winManagerWindowLayout='FileExplorer,BufExplorer|TagList'
+noremap<c-b> :BottomExplorerWindow<cr>
+noremap<c-f> :FirstExplorerWindow<cr>
+noremap<c-w> :WMToggle<cr>
+
+set tags=tags; "set ctags obj to current dir
+
+
+let Tlist_Auto_One_File=1           "0 is a list of multiple file functions at the same time,1 only shows a list if current file functions
+let Tlist_Auto_Update=1             "automatically update the taglsit to include newly edited files
+let Tlist_File_Fold_Auto_Close=1    "Non_current file,function list folded hidden
+let Tlist_Exit_OnlyWindow=1         "if taglsit is the last window, exit vim
+
+
+nmap tg :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q *<CR>:set tags+=./tags<CR>
+
+
+
+
+
+
+
+
+
+
+""""""""""""""""""""""""""nerdtree
+"nerdtree set
+"control when the cursor moves more than a certain distance,whether to
+"automatically addjust the focus to the screen center
+let NERDTreeAutoCenter=1
+"specify the mouse mode(1.double-click to open 2.click to open the
+"directory,double_click tp open the file)
+"let NERDTreeMouseMode=2
+
+"whether to display bookmark list by default
+"let NERDTreeShowBookmarks=1
+
+"whether to display the files by default
+let NERDTreeShowHidden=1
+
+if filereadable('/etc/redhat-release')
+    let envString = system('cat /etc/redhat-release')
+else
+    let envString = ""
+endif
+
+
+
+"showemarks.vim
+"<leader> mt(enable/disable),mh(remove mark),ma(remove marks on this file)
+let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let showmarks_hlline_lower=1            "highlight
+let showmarks_hlline_upper=1
+"next/prev
+map<F2> ]`
+map<S-F2> [`
+
+
+
+
+" all mode mapping
+noremap <space> viw
+
+"###  normal mode 
+nnoremap <leader>w <esc>:w<cr>
+nnoremap <leader>q <esc>:q<cr>
+nnoremap <leader>wq <esc>:wq<cr>
+
+"visual mode mapping
+
+"map \ to U when pressing \ bar ,will transition the word in cursor to upper
+"vnoremap \ U
+
+"insert mode mapping
+"map "ctrl+d" to dd .when pressing ctrl+d bar in inset mode ,vim will delete a line 
+inoremap <c-d> <esc>dda
+inoremap <c-k> <up>
+inoremap <c-j> <down>
+inoremap <leader>w <esc>:w<cr>
+inoremap <leader>q <esc>:q<cr>
+inoremap <leader>wq <esc>:wq<cr>
