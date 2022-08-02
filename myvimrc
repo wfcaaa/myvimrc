@@ -17,6 +17,7 @@ Plugin 'vim-scripts/a.vim'
 " colorscheme pulugin
 Plugin 'flazz/vim-colorschemes'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'Valloric/YouCompleteMe' 
 call vundle#end()
 filetype plugin indent on
 
@@ -29,6 +30,7 @@ set nu
 syntax enable               " syntax highlight
 
 set mousemodel=popup        "right-click will pop up menu
+set hlsearch                " set search highlight
 set history=1000
 set ignorecase
 set mouse=a
@@ -87,8 +89,8 @@ map<c-c> "+y
 map<c-x> "+x
 
 
-let mapleader=","
-let g:mapleader=","
+let mapleader="-"
+let g:mapleader="-"
 """""""""""""""""""""""ctags
 let Tlist_Show_One_File=1       "set tlist obj to the current file
 let Tlist_Exit_OnlyWindow=1     "when the tlist is the only one, close it
@@ -178,3 +180,8 @@ inoremap <c-j> <down>
 inoremap <leader>w <esc>:w<cr>
 inoremap <leader>q <esc>:q<cr>
 inoremap <leader>wq <esc>:wq<cr>
+
+"配置YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+let g:EclimCompletionMethod = 'omnifunc'
+
