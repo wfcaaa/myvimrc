@@ -1,0 +1,322 @@
+"vundel set
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+"formal plugin
+Plugin 'gmarik/Vundle.vim'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'vim-scripts/ShowMarks'
+Plugin 'vim-scripts/winmanager'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-scripts/a.vim'
+
+" colorscheme pulugin
+Plugin 'flazz/vim-colorschemes'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'tomasr/molokai'
+
+" 目录树导航
+Plugin 'scrooloose/nerdtree'
+
+" 标签导航 tagbar
+" tagbar按作用域归类不同的标签。按名字空间 n_foo、类 Foo 进行归类,在内部有声明、有定义;
+" 显示标签类型。名字空间、类、函数等等;
+Plugin  'majutsushi/tagbar'
+
+" 多文档编辑
+Plugin 'fholgado/minibufexpl.vim'
+
+" 文件搜索 CtrlP会沿着vim打开的目录一直向上查找类似.git/.svn等这样的项目管理的目录，如果找到则将这个作为项目的根目录 vimrc中配置如下：
+Plugin  'kien/ctrlp.vim'
+
+"美化状态栏
+Plugin  'Lokaltog/vim-powerline'
+
+"标志无效空格
+Plugin  'bronson/vim-trailing-whitespace'
+
+" 自动补全插件
+Plugin 'Valloric/YouCompleteMe'
+"宏定义补全
+Plugin  'SirVer/ultisnips'
+Plugin   'honza/vim-snippets'
+
+"快速加减注释
+Plugin  'scrooloose/nerdcommenter'
+
+"代码对齐
+Plugin  'godlygeek/tabular'
+
+
+
+
+call vundle#end()
+
+filetype plugin indent on
+
+
+
+
+"""""""""""basic
+set encoding=utf-8
+set nu
+syntax enable               " syntax highlight
+
+set mousemodel=popup        "right-click will pop up menu
+set hlsearch                " set search highlight
+set history=1000
+set ignorecase
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+
+"keyboard
+set tabstop=4 				"set tab width equal to 4
+set expandtab 				"use space to replace tab
+set softtabstop=4			"treat multple spaces as a tab when delete
+set scrolloff=8				"margin rows when cursor reach top or bottom
+set backspace=2				"enable backspace
+set whichwrap=b,s,<,>,[,]	"will skip to next row when the cursor reach the the end of the row
+"indent
+set autoindent              "auto indent
+set autochdir               "auto change the dirctory
+set cindent                 "c mode indent
+set cindent shiftwidth=4    "indent space number
+set cursorline
+set nowrapscan              "no auto wrap
+
+"############## 颜色主题 solarized
+set background=light
+let g:solarized_termcolors=256
+colorscheme solarized
+if has('gui_running')
+    set background=light
+    set guioptions+=c        " 使用字符提示框
+    set guioptions-=m        " 隐藏菜单栏
+    set cursorline           " 突出显示当前行
+else
+    set background=dark
+endif
+
+
+"############fold level set
+set foldmethod=syntax               "fold by syn
+set foldlevel=2                     "fold level
+
+
+
+
+
+
+"###############insert mode quickly move
+inoremap<C-L> <Right>
+inoremap<C-H> <Left>
+inoremap<C-E> <del>
+"inoremap<C-S> <Down>
+"inoremap<C-W> <Up>
+imap <m-4> <esc>$a
+imap <m-0> <esc>0i
+imap <m-6> <esc>^i
+map <silent> <expr> j (v:count == 0 ? 'gj' :'j')
+map <silent> <expr> k (v:count == 0 ? 'gk' :'k')
+
+
+let mapleader="-"
+let g:mapleader="-"
+"""""""""""""""""""""""ctags
+let Tlist_Show_One_File=1       "set tlist obj to the current file
+let Tlist_Exit_OnlyWindow=1     "when the tlist is the only one, close it
+set updatetime=1500             "flash time
+"jlanzarotta explorer
+let g:bufExplorerSplitRight=1   " the position of buffexplorer is right
+let g:bufExplorerShowTabBuffer=1  "show buffer on the specific tab
+
+"windowmanager
+let g:winManagerWindowLayout='FileExplorer,BufExplorer|TagList'
+noremap<c-b> :BottomExplorerWindow<cr>
+noremap<c-f> :FirstExplorerWindow<cr>
+noremap<c-w> :WMToggle<cr>
+
+set tags=tags; "set ctags obj to current dir
+
+
+let Tlist_Auto_One_File=1           "0 is a list of multiple file functions at the same time,1 only shows a list if current file functions
+let Tlist_Auto_Update=1             "automatically update the taglsit to include newly edited files
+let Tlist_File_Fold_Auto_Close=1    "Non_current file,function list folded hidden
+let Tlist_Exit_OnlyWindow=1         "if taglsit is the last window, exit vim
+
+
+nmap tg :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q *<CR>:set tags+=./tags<CR>
+
+"###################################################################
+
+"""""""""""""""""""""""""" 目录树导航 nerdtree
+" \nt                 打开nerdree窗口，在左侧栏显示
+nmap <leader>nt :NERDTree<CR>
+let NERDTreeHighlightCursorline=1
+let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
+let g:netrw_home='~/bak'
+"close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
+"whether to display the files by default
+let NERDTreeShowHidden=1
+"###################################################################
+
+"""""""""""""""""""""""""" 标签导航 tagbar
+nmap <leader>tb :TagbarToggle<CR>  " \tb 打开tagbar窗口
+let g:tagbar_autofocus = 1
+"###################################################################
+
+
+"""""""""""""""""""""""""" 多文档编辑 minibufexpl
+" 多文件切换，也可使用鼠标双击相应文件名进行切换
+let g:miniBufExplMapWindowNavVim    = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs  = 1
+let g:miniBufExplModSelTarget       = 1
+"解决FileExplorer窗口变小问题
+let g:miniBufExplForceSyntaxEnable = 1
+let g:miniBufExplorerMoreThanOne=2
+let g:miniBufExplCycleArround=1
+" buffer 切换快捷键，默认方向键左右可以切换buffer
+map <C-Tab> :MBEbn<cr>
+map <C-S-Tab> :MBEbp<cr>
+"###################################################################
+
+""""""""""""""""""""""""" 文件搜索
+" 打开ctrlp搜索
+let g:ctrlp_map = '<leader>ff'
+let g:ctrlp_cmd = 'CtrlP'
+" 相当于mru功能，show recently opened files
+map <leader>fp :CtrlPMRU<CR>
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz)$',
+    \ }
+"\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+let g:ctrlp_working_path_mode=0
+let g:ctrlp_match_window_bottom=1
+let g:ctrlp_max_height=15
+let g:ctrlp_match_window_reversed=0
+let g:ctrlp_mruf_max=500
+let g:ctrlp_follow_symlinks=1
+"###################################################################
+
+"""""""""""""""""""""""""" 美化状态栏设置
+"if want to use fancy,need to add font patch -> git clone git://gist.github.com/1630581.git ~/.fonts/ttf-dejavu-powerline
+"let g:Powerline_symbols = 'fancy'
+let g:Powerline_symbols = 'unicode'
+"###################################################################
+
+"""""""""""""""""""""""""" 标志无效空格
+map <leader><space> :FixWhitespace<cr>	" \+space去掉末尾空格
+"###################################################################
+
+"""""""""""""""""""""""""" 自动补全
+set completeopt=longest,menu "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif "离开插入模式后自动关闭预览窗口
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>" "回车即选中当前项
+"上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+"youcompleteme  默认tab  s-tab 和自动补全冲突
+"let g:ycm_key_list_select_completion=['<c-n>']
+let g:ycm_key_list_select_completion = ['<Down>']
+"let g:ycm_key_list_previous_completion=['<c-p>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
+let g:ycm_collect_identifiers_from_tags_files=1 " 开启 YCM 基于标签引擎
+let g:ycm_min_num_of_chars_for_completion=1 " 从第2个键入字符就开始罗列匹配项
+let g:ycm_cache_omnifunc=0 " 禁止缓存匹配项,每次都重新生成匹配项
+let g:ycm_seed_identifiers_with_syntax=1 " 语法关键字补全
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR> "force recomile with syntastic
+"nnoremap <leader>lo :lopen<CR> "open locationlist
+"nnoremap <leader>lc :lclose<CR> "close locationlist
+inoremap <leader><leader> <C-x><C-o>
+"在注释输入中也能补全
+let g:ycm_complete_in_comments = 1
+"在字符串输入中也能补全
+let g:ycm_complete_in_strings = 1
+"注释和字符串中的文字也会被收入补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR> " 跳转到定义处
+"###################################################################
+
+"""""""""""""""""""""""""" 宏定义补全
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+"###################################################################
+
+"""""""""""""""""""""""""" 快速加减注释
+let NERDSpaceDelims = 1
+"###################################################################
+
+"""""""""""""""""""""""""" 代码对齐
+" \bb                 按=号对齐代码 [Tabular插件]
+nmap <leader>bb :Tab /=<CR>
+" \bn                 自定义对齐    [Tabular插件]
+nmap <leader>bn :Tab /
+"###################################################################
+"showemarks.vim
+"<leader> mt(enable/disable),mh(remove mark),ma(remove marks on this file)
+let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let showmarks_hlline_lower=2            "highlight
+let showmarks_hlline_upper=1
+"next/prev
+map<F2> ]`
+map<S-F2> [`
+
+
+
+
+" all mode mapping
+noremap <space> viw
+
+"###  normal mode
+nnoremap <leader>w <esc>:w<cr>
+nnoremap <leader>q <esc>:q<cr>
+nnoremap <leader>wq <esc>:wq<cr>
+
+"visual mode mapping
+
+"map \ to U when pressing \ bar ,will transition the word in cursor to upper
+"vnoremap \ U
+
+"insert mode mapping
+"map "ctrl+d" to dd .when pressing ctrl+d bar in inset mode ,vim will delete a line
+inoremap <c-d> <esc>dda
+inoremap <c-k> <up>
+inoremap <c-j> <down>
+inoremap <leader>w <esc>:w<cr>
+inoremap <leader>q <esc>:q<cr>
+inoremap <leader>wq <esc>:wq<cr>
+
+"配置YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+let g:EclimCompletionMethod = 'omnifunc'
+
+"########## 全息屏控制，使用前需使用 sudo apt-get install wmctrl 安装 vmctrl
+fun! ToggleFullscreen()		" 将外部命令 wmctrl 控制窗口最大化的命令行参数封装成一个 vim 的函数
+        call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+endfunc
+map <silent> <F11> :call ToggleFullscreen()<CR>	" 全屏开/关快捷键
+autocmd VimEnter * call ToggleFullscreen()	" 启动 vim 时自动全屏
+"###################################################################
+
+" 环境字符串设置
+if filereadable('/etc/redhat-release')
+    let envString = system('cat /etc/redhat-release')
+else
+    let envString = ""
+endif
+
